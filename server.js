@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const flash = require('express-flash');
 const MongoDbStore = require('connect-mongo'); 
-
+const passport = require('passport');
 require('dotenv').config();
 
 const app = express();
@@ -36,9 +36,6 @@ connection.once('open',()=>{
 });
 
 //middlewares
-
-// session store
-
 // session config - middleware
 app.use(session({
     secret : COOKIE_SECRET,
@@ -50,12 +47,24 @@ app.use(session({
     cookie : {maxAge : 3600*24000, } // 24hrs
 }));
 
+
+// setting passport
+const passportInit = require('./app/config/passport');
+passportInit(passport); // will take passport object as parameter 
+app.use(passport.initialize());
+app.use(passport.session());
+
+// session store
+
+
 app.use(flash());
+app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 
 // global middlewares
 app.use((req,res,next)=>{
     res.locals.session = req.session;
+    res.locals.user = req.user;
     next(); 
 })
 
