@@ -5,6 +5,10 @@ const passport = require('passport');
 
 function authController() {
 
+    const _getUserRole = (req)=>{
+        return req.user.role==='Admin'?'/admin/orders':'/customers/orders';
+    }
+
     return {
         login(req,res) {
             res.render('auth/login');
@@ -46,7 +50,7 @@ function authController() {
             user.save()
             .then((user)=>{
                 // login functionality
-                return res.redirect('/');
+                return res.redirect('/login');
             })
             .catch(err=>{
                 req.flash('error','Something Went Wrong');
@@ -78,14 +82,15 @@ function authController() {
                         req.flash('error',info.message);
                         return next(err);
                     }
-
-                    return res.redirect('/');
+                    // redirect to respective dashboard. 
+                    return res.redirect(_getUserRole(req));
                 })
             })(req,res,next);
 
         },
         postLogout(req,res) {
             req.logout();
+            delete req.session.cart;
             return res.redirect('/login');
         }
 

@@ -1,9 +1,9 @@
 // all the client side code will be here.
 import axios from 'axios';
 import Noty from 'noty';
+import { initAdmin } from './admin';
 let addToCartBtns = document.querySelectorAll('.add-to-cart');
 let addToCartNum = document.querySelector('#cartCounter');
-
 const updateCart = async (pizza) =>{
     try {
         const res = await axios.post('/update-cart',pizza);
@@ -34,3 +34,12 @@ addToCartBtns.forEach((btn)=>{
         updateCart(currentPizza);
     })
 })
+
+const alertMsg = document.querySelector('#success-alert');
+if(alertMsg) {
+    setTimeout(() => {
+        alertMsg.remove();
+    }, 2000);
+}
+
+initAdmin();

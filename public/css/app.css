@@ -332,3 +332,7 @@ section.cart .amount {
   border-radius: 50px !important;
   padding-left: 8px;
 }
+
+a.link {
+  color: #F44336;
+}
