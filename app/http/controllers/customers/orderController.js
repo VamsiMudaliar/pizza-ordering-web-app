@@ -2,15 +2,14 @@
  
 const Order = require('../../../models/order');
 const moment = require('moment');
+
 function orderController() {
 
     return {
         async placeOrder(req,res) {
-            console.log('TEST HERE ');
             const {phoneNum,address} = req.body;
             // validate Request;
-            console.log('TEST :',req.body);
-
+           
             if(!phoneNum || !address) {
                 req.flash('error','* All fields are required');
                 return res.redirect('/cart');
@@ -23,9 +22,17 @@ function orderController() {
             })
             try{
                 const result = await order.save();
-                req.flash('success','Order Placed Successfully');
-                delete req.session.cart;
-                return res.redirect('/customers/orders');
+               
+                Order.populate(result,{path:'customerId'},(err,data)=>{
+                    req.flash('success','Order Placed Successfully');
+                    delete req.session.cart;
+                    
+                    // emit event. 
+                    const eventEmitter = req.app.get('eventEmitter');
+                    eventEmitter.emit('orderPlaced',data);
+
+                    return res.redirect('/customers/orders');
+                })
             }
             catch(err) {
                 req.flash('error','Couldn\'t Place Order.');
@@ -43,6 +50,15 @@ function orderController() {
            catch(err) {
                 console.log('ERROR :',err);    
            }
+        },
+        async showSingleOrder(req,res) {
+            const data = await Order.findById(req.params.id)
+            console.log('Data Fetched ::',data);
+            // authorize user. 
+            if(req.user._id.toString() === data.customerId.toString()) {
+                return res.render('customers/trackOrder',{orderDetails:data});
+            }
+            return res.redirect('/');
         }
     }
 

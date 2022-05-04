@@ -5,16 +5,14 @@ function adminOrderController() {
 
     return {
         showOrders(req,res) {
-
+            console.log('TEST FUNC ');
             Order.find({status:{$ne:'completed'}}).sort({'createdAt':-1})
             .populate('customerId','-password').exec((err,orders)=>{
                 if(err) {
                     console.log('ERROR >> '+err);
                 }
-                console.log(req.xhr);
                 console.log('ORDERS >>> '+orders);
                 if(req.xhr){
-                    console.log('ORDERS >>> '+orders);
                     return res.json({orders});
                 }
                 

@@ -9,6 +9,8 @@ const session = require('express-session');
 const flash = require('express-flash');
 const MongoDbStore = require('connect-mongo'); 
 const passport = require('passport');
+const Emitter = require('events');
+
 require('dotenv').config();
 
 const app = express();
@@ -47,6 +49,9 @@ app.use(session({
     cookie : {maxAge : 3600*24000, } // 24hrs
 }));
 
+// event emitters
+const eventEmitter = new Emitter()
+app.set('eventEmitter',eventEmitter);
 
 // setting passport
 const passportInit = require('./app/config/passport');
@@ -55,7 +60,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // session store
-
 
 app.use(flash());
 app.use(express.urlencoded({extended: false}));
@@ -68,7 +72,6 @@ app.use((req,res,next)=>{
     next(); 
 })
 
-
 // using expressJS Layouts.
 app.use(expressJsLayouts);
 // setting template directory.
@@ -79,11 +82,28 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 require('./routes/webRoutes')(app);
 
-app.listen(PORT,()=>{
+const server = app.listen(PORT,()=>{
     console.log(`Server started at PORT: ${PORT}`);
 })
 
 
+const io = require('socket.io')(server);
 
+io.on('connection',(socket)=>{
+    console.log(socket.id);
+    socket.on('join',(orderRoom)=>{
+        console.log('ORDER ROOM :'+orderRoom);
+        socket.join(orderRoom);
+    })
+})
 
+// get the event Emitter
 
+eventEmitter.on('orderUpdated',(data)=>{
+    console.log('DATA RECIEVED >>',data);
+    io.to(`order_${data.id}`).emit('orderUpdated',data);
+})
+
+eventEmitter.on('orderPlaced',(data)=>{
+    io.to('adminRoom').emit('orderPlaced',data);
+})

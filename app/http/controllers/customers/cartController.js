@@ -25,7 +25,6 @@ function cartController() {
         update(req,res) {
             let cart = null;
             let {_id,name,size,image,price} = req.body;
-         //   console.log('BODY >>',JSON.stringify(req.body));
             let currentPrice = +price;
              // initialize cart
             if(!req.session.cart) {

@@ -9,7 +9,6 @@ function homeController() {
         async index(req,res) {
             const data = await Menu.find();
             
-            console.log('Data : ',data);
             res.render('home',{pizzas:data});
         } 
 
