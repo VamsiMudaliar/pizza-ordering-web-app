@@ -1,6 +1,6 @@
 <section class="status">
     <div class="container mx-auto">
-        <div class="status-box w-2/3 mx-auto">
+        <div class="status-box w-full lg:w-2/3 mx-auto">
 
             <div class="flex items-center justify-between mb-12">
                 <h1 class="text-xl font-bold">Track Delivery Status</h1>
@@ -8,10 +8,10 @@
                 <input type="hidden" id="fetchOrder" value="<%=JSON.stringify(orderDetails)%>"/>
             </div>
             <ul>
-                <li data-status="placed" class="status-line text-xl pb-16"><span>Order Placed</span></li>
-                <li data-status="confirmed" class="status-line text-xl pb-16"><span>Order Confirmation</span></li> 
-                <li data-status="prepared" class="status-line text-xl pb-16 "><span>Preparation</span></li>
-                <li data-status="delivered" class="status-line text-xl pb-16 "><span>Out for Delivery</span></li>
+                <li data-status="placed" class="status-line text-sm md:text-xl pb-16"><span>Order Placed</span></li>
+                <li data-status="confirmed" class="status-line text-sm md:text-xl pb-16"><span>Order Confirmation</span></li> 
+                <li data-status="prepared" class="status-line text-sm md:text-xl pb-16 "><span>Preparation</span></li>
+                <li data-status="delivered" class="status-line text-sm md:text-xl pb-16 "><span>Out for Delivery</span></li>
                 <li data-status="completed" class="status-line text-xl "><span>Completed</span></li>
             </ul>
 

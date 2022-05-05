@@ -53,7 +53,6 @@ if(alertMsg) {
 
 let socket = io();
 
-initAdmin(socket);
 
 // change order status
 
@@ -96,6 +95,7 @@ let adminAreaPath = window.location.pathname;
 console.log('ADMIN AREAD PATH : ',adminAreaPath); 
 
 if(adminAreaPath.includes('admin')) {
+    initAdmin(socket);
     socket.emit('join','adminRoom');
 }
 

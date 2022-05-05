@@ -23,8 +23,7 @@ const {COOKIE_SECRET,
 const PORT = process.env.PORT || 3600;
 
 // Database connection 
-const url = `mongodb+srv://${DATABASE_USER}:${DATABASE_PASSWORD}@cluster0.gkrd5.mongodb.net/${DATABASE_NAME}?retryWrites=true&w=majority`;
-
+const url = process.env.MONGO_CONNECTION_URL;
 mongoose.connect(url, {
         useNewUrlParser: true,
         useUnifiedTopology: true

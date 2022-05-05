@@ -154,3 +154,21 @@ section.status {
 .status-box ul li.current-status span:after {
     background:$primary;
 }
+
+@media(max-width: 1060px) {
+    .container {
+        max-width: 90%;
+    }
+    .table {
+        display:block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+}
+
+@media(max-width: 768px) {
+    .status-box ui li span:before {
+        font-size:34px;
+    }
+}
